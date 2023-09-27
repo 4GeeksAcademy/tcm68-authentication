@@ -4,15 +4,44 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
-
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
 api = Blueprint('api', __name__)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+@api.route('/token', methods=['POST'])
+def create_token():
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    if email != "test" or password != "test":
+        return jsonify({"msg": "Bad s or password"}), 401
+    
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+
+@api.route('/hello', methods=['GET'])
+@jwt_required()
+def get_hello():
+
+    email = get_jwt_identity()
+    dictionary = {
+        "message": "Hello world"
     }
 
-    return jsonify(response_body), 200
+    return jsonify(dictionary)
+
+
+@api.route('/private', methods=['GET'])
+@jwt_required()
+def private_route():
+    
+    email = get_jwt_identity()
+    response = {
+        "message": f"Hello, {email}! This is a protected route."
+    }
+
+    return jsonify(response), 200
+
