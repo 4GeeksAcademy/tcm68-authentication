@@ -7,10 +7,12 @@ export const PrivatePage = () => {
     const isAuthenticated = store.token && store.token !== "" && store.token !== undefined;
     const navigate = useNavigate(); // Use navigate instead of Navigate
 
-    if (!isAuthenticated) {
-        navigate("/login"); // Use navigate to navigate to /login
-        return null; // You can return null or a loading indicator here
-    }
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate("/login"); // Use navigate to navigate to /login
+            // return null; // You can return null or a loading indicator here
+        }
+    }, [])
 
     useEffect(() => {
         if (isAuthenticated) {

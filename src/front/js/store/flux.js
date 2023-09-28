@@ -46,7 +46,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 			};
 			try{
-			const resp = await fetch('https://solid-dollop-6j5x9767pjp3rr97-3001.app.github.dev/api/token', opts)
+			const resp = await fetch(`${process.env.BACKEND_URL}api/token`, opts)
 			if (resp.status !== 200){
 				alert("There has been some error");
 				return false;
@@ -79,7 +79,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			fetch(process.env.BACKEND_URL + "/api/hello",  opts)
 			  .then(resp => resp.json())
 			  .then(data => setStore({ message: data.message }))
-			  .catch(error => console.log("Error loading message from backend", error));
+			//   .catch(error => console.log("Error loading message from backend", error));
 		  },
 
 
