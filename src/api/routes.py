@@ -21,6 +21,27 @@ def create_token():
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
 
+@api.route('/signup', methods=['POST'])
+def signup():
+    data = request.json
+
+    # Check if the email already exists in the database
+    existing_user = User.query.filter_by(email=data['email']).first()
+    if existing_user:
+        return jsonify({"message": "Email already registered"}), 400
+
+    # Create a new user
+    new_user = User(
+        email=data['email'],
+        password=data['password'],
+        is_active=True,
+    )
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"message": "User registered successfully"}), 201
+
+
 
 @api.route('/hello', methods=['GET'])
 @jwt_required()
@@ -37,6 +58,17 @@ def get_hello():
 @api.route('/private', methods=['GET'])
 @jwt_required()
 def private_route():
+    
+    email = get_jwt_identity()
+    response = {
+        "message": f"Hello, {email}! This is a protected route."
+    }
+
+    return jsonify(response), 200
+
+@api.route('/demo', methods=['GET'])
+@jwt_required()
+def demo_route():
     
     email = get_jwt_identity()
     response = {

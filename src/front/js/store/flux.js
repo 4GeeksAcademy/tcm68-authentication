@@ -63,10 +63,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 			}
 		},
 
-
-
-
-
+		signup: async (email, password) => {
+			const opts = {
+			  method: 'POST',
+			  headers: {
+				'Content-Type': 'application/json',
+			  },
+			  body: JSON.stringify({
+				email: email,
+				password: password,
+			  }),
+			};
+		  
+			try {
+			  const resp = await fetch(`${process.env.BACKEND_URL}api/signup`, opts);
+		  
+			  if (resp.status !== 201) {
+				alert('There was an error during signup');
+				return false;
+			  }
+		  
+			  const data = await resp.json();
+			  console.log('Signup response from the backend', data);
+		  
+			  return true;
+			} 
+			catch (error) {
+			  console.error('Error during signup', error);
+			  return false;
+			}
+		  },
 
 
 		getMessage: async () => {
@@ -76,7 +102,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				"Authorization": "Bearer " + store.token // Added a space after "Bearer"
 			  }
 			};
-			fetch(process.env.BACKEND_URL + "/api/hello",  opts)
+			fetch(process.env.BACKEND_URL + "api/hello",  opts)
 			  .then(resp => resp.json())
 			  .then(data => setStore({ message: data.message }))
 			//   .catch(error => console.log("Error loading message from backend", error));

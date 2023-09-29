@@ -23,7 +23,6 @@ export const PrivatePage = () => {
 
     return (
         <div style={{ background: 'black', color: 'white', textAlign: 'center', fontSize: '2em' }}>
-            <h1>Hello, World!</h1>
             <p>{store.message}</p>
         </div>
     );

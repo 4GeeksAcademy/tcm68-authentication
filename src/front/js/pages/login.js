@@ -42,6 +42,8 @@ export const Login = () => {
 				<button onClick={handleClick}>Login</button>
 				</form>
 			)}
+			<p>Do you need to make an account?</p>
+            <button onClick={() => navigate('/signup')}>Sign up</button>
 			</div>
 				);
 };
